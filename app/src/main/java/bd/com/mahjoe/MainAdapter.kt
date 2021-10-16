@@ -7,7 +7,7 @@ import bd.com.mahjoe.databinding.AdapterMovieBinding
 import bd.com.mahjoe.model.Movie
 import com.bumptech.glide.Glide
 
-class MainAdapter: RecyclerView.Adapter<MainViewHolder>() {
+class MainAdapter(private var listener: MovieListener): RecyclerView.Adapter<MainViewHolder>() {
 
     var movies = mutableListOf<Movie>()
 
@@ -20,7 +20,7 @@ class MainAdapter: RecyclerView.Adapter<MainViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
       val inflater = LayoutInflater.from(parent.context)
         val binding = AdapterMovieBinding.inflate(inflater,parent,false)
-        return  MainViewHolder(binding);
+        return MainViewHolder(binding);
     }
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
@@ -28,6 +28,10 @@ class MainAdapter: RecyclerView.Adapter<MainViewHolder>() {
         holder.binding.name.text = movie.name
 
         Glide.with(holder.itemView.context).load(movie.imageUrl).into(holder.binding.imageView)
+
+        holder.binding.imageView.setOnClickListener {
+            listener.onMovieItemClick(movie)
+        }
     }
 
     override fun getItemCount(): Int {
